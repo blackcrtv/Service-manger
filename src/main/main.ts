@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, Menu, Tray } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -71,8 +71,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 500,
+    height: 600,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
@@ -97,6 +97,19 @@ const createWindow = async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
+
+  mainWindow.on('close', function (event) {
+    event.preventDefault();
+    mainWindow?.hide();
+
+    return false;
+});
+
+var contextMenu = Menu.buildFromTemplate([
+  { label: 'Show App', click:  function(){
+      mainWindow?.show();
+  } }
+]);
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
@@ -124,9 +137,29 @@ app.on('window-all-closed', () => {
   }
 });
 
+let isQuiting;
+let tray;
+
 app
   .whenReady()
   .then(() => {
+    tray = new Tray(path.join(app.isPackaged
+      ? path.join(process.resourcesPath, 'assets')
+      : path.join(__dirname, '../../assets'),'icon.png'));
+
+  tray.setContextMenu(Menu.buildFromTemplate([
+    {
+      label: 'Show App', click: function () {
+        mainWindow?.show();
+      }
+    },
+    {
+      label: 'Quit', click: function () {
+        isQuiting = true;
+        app.quit();
+      }
+    }
+  ]));
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
