@@ -1,43 +1,20 @@
-// import Switch from './switch';
+import Switch from './switch';
 import classes from '../../css/services.module.css';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useCallback } from 'react';
 
-const servicesObject = [
-    {
-      name: "TeamViewer",
-      os: "router",
-      status: "STOPPED",
-      startCommand: "teltonik/start",
-      stopCommand: "teltonik/start"
-    },
-    {
-      name: "XboxGipSvc",
-      os: "windows",
-      status: "RUNNING",
-      startCommand: "rdp/start",
-      stopCommand: "rdp/start"
-    },
-    {
-      name: "RabbitMQ",
-      os: "windows",
-      status: "RUNNING",
-      startCommand: "rdp/start",
-      stopCommand: "rdp/start"
-    }
-  ]
 
 const ServiceList = (params) => {
 
-    // const stateServices = useSelector(state => state.controlService)
+    const stateServices = useSelector(state => state.controlService.services)
 
     return (
-        servicesObject.map((serv, i) => {
+      stateServices.map((serv, i) => {
             return (
                 <div key={i} className={`${classes['wrapper-elements']} ${serv.status === "RUNNING" ? classes.active : classes.stopped}`}>
-                    <div>{serv.name}</div>
-                    {/* <Switch status={serv}></Switch> */ 'action'}
-                    <div>{serv.status}</div>
-                    {/* {stateServices[serv.name]?.status} */}
+                    <div className={classes['service-name']}>{serv.name}</div>
+                    <Switch status={serv} id={i}></Switch>
+                    {serv.status}
                 </div>
             )
         })

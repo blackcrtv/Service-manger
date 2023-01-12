@@ -5,7 +5,11 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 1rem;
+    min-height: 1rem;
     text-align: center;
     padding: 10px;
+}
+
+.log-mess{
+    margin: 3px;
 }

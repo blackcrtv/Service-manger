@@ -1,3 +1,25 @@
+@property --myColor1 {
+    syntax: '<color>';
+    initial-value: rgba(128, 128, 128, 0.075);
+    inherits: false;
+  }
+  
+  @property --myColor2 {
+    syntax: '<color>';
+    initial-value: rgba(128, 128, 128, 0.014);
+    inherits: false;
+  }
+  @property --myColor3 {
+    syntax: '<color>';
+    initial-value: rgba(128, 128, 128, 0.144);
+    inherits: false;
+  }
+  @property --myColor4 {
+    syntax: '<color>';
+    initial-value: rgba(128, 128, 128, 0.096);
+    inherits: false;
+  }
+
 .wrapper-elements {
     display: flex;
     align-items: center;
@@ -8,18 +30,22 @@
 
     border-radius: 0% 0% 0% 0% / 0% 0% 0% 0% ;
     box-shadow: 3px 3px rgba(0,0,0,.15);
-    transition: all .4s ease;
+    background: linear-gradient(90deg, var(--myColor1) 10%, var(--myColor2) 45%, var(--myColor3) 76%, var(--myColor4) 100%);
+    transition: --myColor1 1s, --myColor2 1s, --myColor3 2s, --myColor4 3.5s;
 }
 
 .active{
-    transition: background 500ms linear;
-    background: linear-gradient(90deg, rgba(0, 36, 11, 0.014) 10%, rgba(9, 121, 15, 0.034) 45%, rgba(7, 118, 16, 0.267) 76%, rgba(1, 105, 10, 0.733) 100%);
+    --myColor1: rgba(0, 36, 11, 0.014);
+    --myColor2: rgba(9, 121, 15, 0.034);
+    --myColor3: rgba(7, 118, 16, 0.267);
+    --myColor4: rgba(1, 105, 10, 0.733);
 }
 
 .stopped{
-    transition: background 500ms linear;
-    background: linear-gradient(90deg, rgba(36, 22, 0, 0.014) 10%, rgba(121, 9, 18, 0.034) 45%, rgba(118,7,15,0.2665441176470589) 76%, rgba(105, 1, 5, 0.712) 100%);
-
+    --myColor1: rgba(36, 22, 0, 0.014);
+    --myColor2: rgba(121, 9, 18, 0.034);
+    --myColor3: rgba(118,7,15,0.2665441176470589);
+    --myColor4: rgba(105, 1, 5, 0.712);
 }
 
 .disable{
@@ -28,4 +54,9 @@
 .wrapper-elements:hover{
     border-radius: 0% 0% 30% 30% / 0% 0% 3% 3% ;
     box-shadow: 4px 4px rgba(0,0,0,.25);
+}
+
+.service-name{
+    width: 130px;
+    overflow: hidden;
 }

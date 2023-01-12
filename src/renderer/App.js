@@ -8,10 +8,12 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<>
+        <Route path="/" element={
+        <>
           <ServiceList></ServiceList>
           <ConsoleFeedback></ConsoleFeedback>
-        </>} />
+        </>
+      } />
       </Routes>
     </Router>
   );
