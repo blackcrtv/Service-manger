@@ -63,12 +63,18 @@ export const controlService = createSlice({
         addService: (state, action) => {
             return {
                 ...state,
-                [action.payload.status.name]: {
-                    isError: false,
-                    errorMesage: "-",
-                    isActive: false,
-                    status: "Ok"
-                }
+                services:[
+                    ...state.services,
+                    {
+                        name: action.payload.name,
+                        os: (action.payload.os === 'rdp' ? "windows" : "router"),
+                        status: "IDLE",
+                        startCommand: (action.payload.os === 'rdp' ? "rdp/start" : "teltonik/start"),
+                        stopCommand: (action.payload.os === 'rdp' ? "rdp/stop" : "teltonik/stop"),
+                        statusCommand: (action.payload.os === 'rdp' ? "rdp/status" : "teltonik/status"),
+                        isActive: false
+                    }
+                ]
             }
         },
         popConsole:(state)=>{

@@ -105,12 +105,6 @@ const createWindow = async () => {
     return false;
 });
 
-var contextMenu = Menu.buildFromTemplate([
-  { label: 'Show App', click:  function(){
-      mainWindow?.show();
-  } }
-]);
-
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 

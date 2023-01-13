@@ -1,24 +1,26 @@
 
 import classes from '../../css/addService.module.css';
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { popConsole } from '../local/switch-reducer';
+import AddServiceForm from './add-service-form';
 
 const AddService = (params) => {
 
-    const [click, setClicked ] = useState(false)
+    const [click, setClicked ] = useState(false);
 
     const addServiceHandle = ()=>{
-        setClicked(true)
-        setTimeout(()=>{
-            setClicked(false)
-        },3000)
+        setClicked((prevClick)=>{
+            return !prevClick
+        })
+    }
+
+    const isFormOK = ()=>{
+        setClicked(false)
     }
 
     return (
     <div className={classes['wrapper']}>
-        <button onClick={addServiceHandle}>+ Add service</button>
-        {(click ? <div>Nu e gata inca</div> : <></>)}
+        {(click ? <AddServiceForm clearForm={isFormOK}></AddServiceForm> : <></>)}
+        <button onClick={addServiceHandle} className={(!click ? classes['btn'] : classes['hide-btn'])}>{click ? '^' : '+Add Service'}</button>
     </div>
     );
 }

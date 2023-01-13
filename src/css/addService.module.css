@@ -1,5 +1,26 @@
 .wrapper{
-    display: flex;
+    display: grid;
     justify-content: center;
     margin: 0;
+}
+
+.btn{
+    cursor: pointer;
+    border: transparent;
+    border-radius: 10px;
+    padding: 7px;
+}
+
+.hide-btn{
+    font-size: 15px;
+    background-color: rgba(0,0,0, 0.07);
+    cursor: pointer;
+    border: transparent;
+    border-radius: 10px;
+    height: 10px;
+    padding: 6px;
+    display: flex;
+    place-content: center;
+    text-align: center;
+    place-items: center;
 }
