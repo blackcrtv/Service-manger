@@ -2,16 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const servicesObject = [
     {
-      name: "TeamViewer",
-      os: "router",
-      status: "IDLE",
-      startCommand: "rdp/start",
-      stopCommand: "rdp/stop",
-      statusCommand: "rdp/status",
-      isActive: false
-    },
-    {
-      name: "XboxGipSvc",
+      name: "tvnserver",
       os: "windows",
       status: "IDLE",
       startCommand: "rdp/start",
@@ -20,14 +11,14 @@ const servicesObject = [
       isActive: false
     },
     {
-      name: "RabbitMQ",
-      os: "windows",
-      status: "IDLE",
-      startCommand: "rdp/start",
-      stopCommand: "rdp/stop",
-      statusCommand: "rdp/status",
-      isActive: false
-    }
+        name: "Teltonik",
+        os: "router",
+        status: "IDLE",
+        startCommand: "teltonik/start",
+        stopCommand: "teltonik/stop",
+        statusCommand: "teltonik/status",
+        isActive: false
+      }
   ]
 
 

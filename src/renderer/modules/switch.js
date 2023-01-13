@@ -55,11 +55,11 @@ export default function ControlledSwitches(props) {
     };
 
     useEffect(() => {
-        if(flag) return null;
-        const interval = setInterval(async () => {
-            await setServices();
-        }, 3000);
-        return () => clearInterval(interval);
+        if(flag) return () => clearInterval(interval);
+        console.log('SERVICE CHECK')
+        // const interval = setInterval(async () => {
+        // }, 3000);
+        setServices();
     }, [props.status.length]);
 
 
@@ -89,7 +89,7 @@ export default function ControlledSwitches(props) {
         if(response !== 'ERROR')
             dispatch(checkService({
                 id: props.id,
-                isActive: (response === 'RUNNING' ? true : false),
+                isActive: (response.includes('RUNNING') ? true : false),
                 status: response,
                 consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'  
             }))

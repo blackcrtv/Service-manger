@@ -1,0 +1,11 @@
+[
+    {
+        "name": "tvnserver",
+        "os": "router",
+        "status": "IDLE",
+        "startCommand": "rdp/start",
+        "stopCommand": "rdp/stop",
+        "statusCommand": "rdp/status",
+        "isActive": false
+      }
+]
