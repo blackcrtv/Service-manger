@@ -81,7 +81,7 @@ export const controlService = createSlice({
             }
         },
         checkService: (state, action) => {
-            if(state.services[action.payload.id].status === action.payload.status) return {...state}
+            if(state.services[action.payload.id].status === action.payload.status && state.services[action.payload.id].isActive === action.payload.isActive) return {...state}
             let servicesNew = state.services.map((serv, i)=>{
                 if(i === action.payload.id){
                     serv = {
