@@ -22,7 +22,11 @@ export default function ControlledSwitches(props) {
             } else {
                 wantedAction = props.status.stopCommand;
             }
-
+            console.log(flag)
+            await new Promise((resolve,reject)=>{
+                setTimeout(()=>{resolve(true)}, 4000)
+            })
+            console.log(flag)
             let { response } = await controlService(wantedAction, props.status.name);
 
             if(response !== 'ERROR'){
@@ -53,14 +57,15 @@ export default function ControlledSwitches(props) {
         }
 
     };
-
+    let interval;
     useEffect(() => {
         if(flag) return () => clearInterval(interval);
         console.log('SERVICE CHECK')
-        // const interval = setInterval(async () => {
-        // }, 3000);
-        setServices();
-    }, [props.status.length]);
+        interval = setInterval(async () => {
+            setServices();
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [props.status.length, flag]);
 
 
     const checkServices = async (statusCommand, service)=>{
@@ -86,7 +91,7 @@ export default function ControlledSwitches(props) {
         let { response } = await checkServices(props.status.statusCommand, props.status.name);
         if(response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR') setDisabled(true);
         else setDisabled(false);
-        if(response !== 'ERROR')
+        if(response !== 'ERROR' && !flag)
             dispatch(checkService({
                 id: props.id,
                 isActive: (response.includes('RUNNING') ? true : false),
