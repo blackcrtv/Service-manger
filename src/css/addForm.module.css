@@ -11,10 +11,23 @@
     background: #03C988;
     border: transparent;
     border-radius: 10px;
-    margin-left: 25%;
+    margin-left: 32%;
     padding: 3px;
 }
 
 label{
     font-size: 15px;
+    width: 100px;
+    overflow: hidden;
+    margin-right: 5px;
+}
+
+select{
+    font-size: 15px;
+    width: 100px;
+    overflow: hidden;
+}
+
+.wrapper div {
+    display: flex;
 }

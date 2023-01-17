@@ -1,5 +1,5 @@
 import classes from '../../css/addForm.module.css';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { addService } from '../local/switch-reducer';
 
@@ -7,19 +7,19 @@ import { addService } from '../local/switch-reducer';
 const AddServiceForm = (props)=>{
     const dispatch = useDispatch();
 
-    const [serviceName, setServiceName ] = useState('');
-    const [osType, setOsType ] = useState('rdp');
     const [formClear, setFormClear ] = useState(false);
 
-    const setForm = (event)=>{
+    const setForm = ()=>{
         let inputService = document.getElementById('service-name').value;
         let selectOsType = document.getElementById('os-type').value;
+        let dependenciesString = document.getElementById('dependencies').value;
         if(inputService === ''){
             return;
         }
-        setFormClear(true)
+        setFormClear(true);
         dispatch(addService({
             name: inputService,
+            dependencies: (dependenciesString !== '' ? dependenciesString.split(',') : []),
             os: selectOsType
         }))
     }
@@ -37,6 +37,10 @@ const AddServiceForm = (props)=>{
             <div>
                 <label>Service: </label>
                 <input id='service-name' placeholder='Service name...'></input>
+            </div>
+            <div>
+                <label>Dependencies: </label>
+                <input id='dependencies' placeholder='Dependencies with ","'></input>
             </div>
             <div>
                 <label>OS type: </label>

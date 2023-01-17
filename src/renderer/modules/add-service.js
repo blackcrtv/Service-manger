@@ -20,7 +20,7 @@ const AddService = (params) => {
     return (
     <div className={classes['wrapper']}>
         {(click ? <AddServiceForm clearForm={isFormOK}></AddServiceForm> : <></>)}
-        <button onClick={addServiceHandle} className={(!click ? classes['btn'] : classes['hide-btn'])}>{click ? '^' : '+Add Service'}</button>
+        <button onClick={addServiceHandle} className={(!click ? classes['btn'] : classes['hide-btn'])}>{click ? 'CLOSE' : '+Add Service'}</button>
     </div>
     );
 }

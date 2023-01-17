@@ -48,6 +48,20 @@
     --myColor4: rgba(105, 1, 5, 0.712);
 }
 
+.pending{
+  --myColor1: rgba(0, 21, 36, 0.014);
+  --myColor2: rgba(9, 67, 121, 0.034);
+  --myColor3: rgba(7, 68, 118, 0.267);
+  --myColor4: rgba(1, 53, 105, 0.712);
+}
+
+.error{
+  --myColor1: rgba(36, 29, 0, 0.014);
+  --myColor2: rgba(121, 101, 9, 0.034);
+  --myColor3: rgba(116, 118, 7, 0.267);
+  --myColor4: rgba(105, 83, 1, 0.712);
+}
+
 .disable{
     background: rgba(128, 128, 128, 0.267);
 }

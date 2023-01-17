@@ -2,22 +2,26 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const servicesObject = [
     {
-      name: "tvnserver",
+      name: "TermService",
       os: "windows",
+      dependencies: ["UmRdpService"],
       status: "IDLE",
       startCommand: "rdp/start",
       stopCommand: "rdp/stop",
       statusCommand: "rdp/status",
-      isActive: false
+      isActive: false,
+      isLoading: false
     },
     {
         name: "Teltonik",
         os: "router",
+        dependencies: [],
         status: "IDLE",
         startCommand: "teltonik/start",
         stopCommand: "teltonik/stop",
         statusCommand: "teltonik/status",
-        isActive: false
+        isActive: false,
+        isLoading: false
       }
   ]
 
@@ -35,7 +39,8 @@ export const controlService = createSlice({
                     serv = {
                         ...serv,
                         status: action.payload.status,
-                        isActive: !serv.isActive
+                        isActive: !serv.isActive,
+                        isLoading: false
                     }
                 }
                 return serv;
@@ -59,11 +64,12 @@ export const controlService = createSlice({
                     {
                         name: action.payload.name,
                         os: (action.payload.os === 'rdp' ? "windows" : "router"),
+                        dependencies: action.payload.dependencies,
                         status: "IDLE",
                         startCommand: (action.payload.os === 'rdp' ? "rdp/start" : "teltonik/start"),
                         stopCommand: (action.payload.os === 'rdp' ? "rdp/stop" : "teltonik/stop"),
                         statusCommand: (action.payload.os === 'rdp' ? "rdp/status" : "teltonik/status"),
-                        isActive: false
+                        isActive: false,
                     }
                 ]
             }
@@ -79,6 +85,8 @@ export const controlService = createSlice({
         },
         checkService: (state, action) => {
             if(state.services[action.payload.id].status === action.payload.status && state.services[action.payload.id].isActive === action.payload.isActive) return {...state}
+            if(state.services[action.payload.id].isLoading) return {...state}
+            
             let servicesNew = state.services.map((serv, i)=>{
                 if(i === action.payload.id){
                     serv = {
@@ -99,11 +107,29 @@ export const controlService = createSlice({
                     action.payload.consoleMessage
                 ]
             }
+        },
+        setLoading: (state, action) => {
+
+            let servicesNew = state.services.map((serv, i)=>{
+                if(i === action.payload.id){
+                    serv = {
+                        ...serv,
+                        isLoading: action.payload.isLoading
+                    }
+                }
+                return serv;
+            });
+            return {
+                ...state,
+                services:[
+                    ...servicesNew
+                ]
+            }
         }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { setService, checkService, addService, changeServiceStatus, popConsole } = controlService.actions
+export const { setService, checkService, addService, setLoading, popConsole } = controlService.actions
 
 export default controlService.reducer

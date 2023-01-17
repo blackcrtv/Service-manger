@@ -1,8 +1,8 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Switch from '@mui/material/Switch';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { setService, checkService, changeServiceStatus } from '../local/switch-reducer';
+import { setService, checkService, setLoading } from '../local/switch-reducer';
 
 export default function ControlledSwitches(props) {
     const dispatch = useDispatch();
@@ -15,6 +15,10 @@ export default function ControlledSwitches(props) {
 
             setDisabled(true);
             setFlag(true);
+            dispatch(setLoading({
+                id: props.id,
+                isLoading: true
+            }));
 
             let wantedAction;
             if (action === true) {
@@ -22,12 +26,10 @@ export default function ControlledSwitches(props) {
             } else {
                 wantedAction = props.status.stopCommand;
             }
-            console.log(flag)
             await new Promise((resolve,reject)=>{
                 setTimeout(()=>{resolve(true)}, 4000)
             })
-            console.log(flag)
-            let { response } = await controlService(wantedAction, props.status.name);
+            let { response } = await controlService(wantedAction, props.status);
 
             if(response !== 'ERROR'){
                 dispatch(setService({
@@ -54,18 +56,22 @@ export default function ControlledSwitches(props) {
             console.log(error);
             setFlag(false);
             setDisabled(false);
+            dispatch(setLoading({
+                id: props.id,
+                isLoading: false
+            }));
         }
 
     };
     let interval;
     useEffect(() => {
         if(flag) return () => clearInterval(interval);
-        console.log('SERVICE CHECK')
+        if(interval) interval = clearInterval(interval);
         interval = setInterval(async () => {
             setServices();
-        }, 3000);
+        }, 5000);
         return () => clearInterval(interval);
-    }, [props.status.length, flag]);
+    }, [flag]);
 
 
     const checkServices = async (statusCommand, service)=>{
@@ -108,7 +114,8 @@ export default function ControlledSwitches(props) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    service: service
+                    service: service.name,
+                    dependencies: service.dependencies
                 })
             });
             return await responseAPI.json(); 
@@ -124,7 +131,7 @@ export default function ControlledSwitches(props) {
             checked={props.status.isActive}
             onChange={handleChange}
             inputProps={{ 'aria-label': 'controlled' }}
-            disabled={disabledElement}
+            disabled={!props.isLoading && disabledElement}
             color='success'
         />
     );
