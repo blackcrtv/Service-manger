@@ -95,7 +95,7 @@ export default function ControlledSwitches(props) {
 
     const setServices = async ()=>{
         let { response } = await checkServices(props.status.statusCommand, props.status.name);
-        if(response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR' || response === 'NO-CONNECTION' || response !== 'Timeout') setDisabled(true);
+        if(response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR' || response === 'NO-CONNECTION' || response === 'Timeout') setDisabled(true);
         else setDisabled(false);
         if(response !== 'ERROR' && !flag)
             dispatch(checkService({
