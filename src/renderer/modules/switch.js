@@ -38,6 +38,7 @@ export default function ControlledSwitches(props) {
                     status: response,
                     consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'
                 }));
+                setDisabled(false);
             } else {
                 dispatch(setService({
                     isActive: props.status.isActive,
@@ -50,7 +51,6 @@ export default function ControlledSwitches(props) {
 
             // setChecked(action);
             setFlag(false);
-            setDisabled(false);
 
         } catch (error) {
             console.log(error);
@@ -131,7 +131,7 @@ export default function ControlledSwitches(props) {
             checked={props.status.isActive}
             onChange={handleChange}
             inputProps={{ 'aria-label': 'controlled' }}
-            disabled={(!props.isLoading && disabledElement) || flag}
+            disabled={props.status.isLoading || disabledElement}
             color='success'
         />
     );
