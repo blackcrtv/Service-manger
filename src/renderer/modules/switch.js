@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Switch from '@mui/material/Switch';
 import { useDispatch } from 'react-redux';
 
@@ -26,24 +26,24 @@ export default function ControlledSwitches(props) {
             } else {
                 wantedAction = props.status.stopCommand;
             }
-            await new Promise((resolve,reject)=>{
-                setTimeout(()=>{resolve(true)}, 4000)
+            await new Promise((resolve, reject) => {
+                setTimeout(() => { resolve(true) }, 4000)
             })
             let { response } = await controlService(wantedAction, props.status);
 
-            if(response !== 'ERROR' || response !== 'NO-CONNECTION' || response !== 'Timeout' || response !== 'N/A'){
+            if (response !== 'ERROR' && response !== 'NO-CONNECTION' && response !== 'Timeout' && response !== 'N/A') {
                 dispatch(setService({
-                    isActive:!props.status.isActive, 
+                    isActive: !props.status.isActive,
                     id: props.id,
                     status: response,
-                    consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'  
+                    consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'
                 }));
-            }else{
+            } else {
                 dispatch(setService({
-                    isActive: props.status.isActive, 
+                    isActive: props.status.isActive,
                     id: props.id,
                     status: response,
-                    consoleMessage: 'ERROR start/stop"' + props.status.name + '"...'  
+                    consoleMessage: 'ERROR start/stop"' + props.status.name + '"...'
                 }));
             }
 
@@ -63,18 +63,19 @@ export default function ControlledSwitches(props) {
         }
 
     };
-    let interval;
+
     useEffect(() => {
-        if(flag) return () => clearInterval(interval);
-        if(interval) interval = clearInterval(interval);
-        interval = setInterval(async () => {
-            setServices();
+        const interval = setInterval(async () => {
+            if (props.status.isLoading) return;
+            let { response } = await checkServices(props.status.statusCommand, props.status.name);
+            console.log('In' + props.status.name + " " + response)
+            setServices(response);
         }, 5000);
-        return () => clearInterval(interval);
-    }, [flag]);
+        return () => { clearInterval(interval) };
+    }, [props.status.isLoading])
 
 
-    const checkServices = async (statusCommand, service)=>{
+    const checkServices = async (statusCommand, service) => {
         try {
             let responseAPI = await fetch(`http://localhost:5004/api/${statusCommand}`, {
                 method: "POST",
@@ -85,7 +86,7 @@ export default function ControlledSwitches(props) {
                     service: service
                 })
             });
-            return await responseAPI.json(); 
+            return await responseAPI.json();
         } catch (error) {
             return {
                 response: 'ERROR'
@@ -93,20 +94,19 @@ export default function ControlledSwitches(props) {
         }
     }
 
-    const setServices = async ()=>{
-        let { response } = await checkServices(props.status.statusCommand, props.status.name);
-        if(response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR' || response === 'NO-CONNECTION' || response === 'Timeout') setDisabled(true);
+    const setServices = (response) => {
+        if (response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR' || response === 'NO-CONNECTION' || response === 'Timeout') setDisabled(true);
         else setDisabled(false);
-        if(response !== 'ERROR' && !flag)
+        if (response !== 'ERROR')
             dispatch(checkService({
                 id: props.id,
                 isActive: (response.includes('RUNNING') ? true : false),
                 status: response,
-                consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'  
+                consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'
             }))
     }
 
-    const controlService = async (action, service)=>{
+    const controlService = async (action, service) => {
         try {
             let responseAPI = await fetch(`http://localhost:5004/api/${action}`, {
                 method: "POST",
@@ -118,7 +118,7 @@ export default function ControlledSwitches(props) {
                     dependencies: service.dependencies
                 })
             });
-            return await responseAPI.json(); 
+            return await responseAPI.json();
         } catch (error) {
             return {
                 response: 'ERROR'
@@ -131,7 +131,7 @@ export default function ControlledSwitches(props) {
             checked={props.status.isActive}
             onChange={handleChange}
             inputProps={{ 'aria-label': 'controlled' }}
-            disabled={!props.isLoading && disabledElement}
+            disabled={(!props.isLoading && disabledElement) || flag}
             color='success'
         />
     );

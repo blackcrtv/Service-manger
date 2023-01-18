@@ -39,7 +39,7 @@ export const controlService = createSlice({
                     serv = {
                         ...serv,
                         status: action.payload.status,
-                        isActive: !serv.isActive,
+                        isActive: action.payload.isActive,
                         isLoading: false
                     }
                 }
