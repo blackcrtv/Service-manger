@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Switch from '@mui/material/Switch';
 import { useDispatch } from 'react-redux';
 
-import { setService, checkService, setLoading } from '../local/switch-reducer';
+import { setService, checkService, setLoading, setError } from '../local/switch-reducer';
 
 export default function ControlledSwitches(props) {
     const dispatch = useDispatch();
@@ -88,6 +88,7 @@ export default function ControlledSwitches(props) {
             });
             return await responseAPI.json();
         } catch (error) {
+            dispatch(setError({error: true}));
             return {
                 response: 'ERROR'
             }
@@ -120,6 +121,7 @@ export default function ControlledSwitches(props) {
             });
             return await responseAPI.json();
         } catch (error) {
+            dispatch(setError({error: true}));
             return {
                 response: 'ERROR'
             }

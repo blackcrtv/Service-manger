@@ -11,17 +11,54 @@ const AddServiceForm = (props)=>{
 
     const setForm = ()=>{
         let inputService = document.getElementById('service-name').value;
+        let aliasService = document.getElementById('service-alias').value;
         let selectOsType = document.getElementById('os-type').value;
         let dependenciesString = document.getElementById('dependencies').value;
         if(inputService === ''){
             return;
         }
         setFormClear(true);
-        dispatch(addService({
-            name: inputService,
-            dependencies: (dependenciesString !== '' ? dependenciesString.split(',') : []),
-            os: selectOsType
-        }))
+
+        setData({name: inputService, alias: aliasService, dependencies: (dependenciesString !== '' ? dependenciesString.split(',') : []), os: selectOsType}).then((response)=>{
+            if(response === false || response?.response === false){
+                return false;
+            }
+            dispatch(addService({
+                name: inputService,
+                alias: aliasService,
+                dependencies: (dependenciesString !== '' ? dependenciesString.split(',') : []),
+                os: selectOsType
+            }));
+        })
+    }
+
+    const setData = async (service) => {
+        try {
+            let responseAPI = await fetch(`http://localhost:5004/api/file/add`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    service: {
+                        name: service.name,
+                        alias: service.alias,
+                        os: (service.os === 'rdp' ? "windows" : "router"),
+                        dependencies: service.dependencies,
+                        status: "IDLE",
+                        startCommand: (service.os === 'rdp' ? "rdp/start" : "teltonik/start"),
+                        stopCommand: (service.os === 'rdp' ? "rdp/stop" : "teltonik/stop"),
+                        statusCommand: (service.os === 'rdp' ? "rdp/status" : "teltonik/status"),
+                        isActive: false,
+                        isLoading: false
+                    }
+                }
+                )
+            });
+            return await responseAPI.json();
+        } catch (error) {
+            return false
+        }
     }
 
     useEffect(()=>{
@@ -37,6 +74,10 @@ const AddServiceForm = (props)=>{
             <div>
                 <label>Service: </label>
                 <input id='service-name' placeholder='Service name...'></input>
+            </div>
+            <div>
+                <label>Alias: </label>
+                <input id='service-alias' placeholder='Service alias...'></input>
             </div>
             <div>
                 <label>Dependencies: </label>

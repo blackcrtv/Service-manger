@@ -1,0 +1,28 @@
+.wrapper{
+    position: absolute;
+    background: #DD5353;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    place-content: center;
+    text-align: center;
+}
+
+.wrapper button{
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #bfbd53;
+    border-radius: 50px;
+    border: none;
+    padding: 10px;
+    width: 6rem;
+    cursor: pointer;
+}
+
+.wrapper button:hover{
+    padding: 11px;
+    background-color: #ccca66;
+}

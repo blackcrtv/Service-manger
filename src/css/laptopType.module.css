@@ -1,0 +1,19 @@
+.buttons{
+    display: flex;
+    place-content: center;
+    gap: 10rem;
+}
+
+.buttons button{
+    color: white;
+    background-color: #53BF9D;
+    border-radius: 50px;
+    border: none;
+    padding: 15px;
+    width: 8rem;
+    cursor: pointer;
+}
+
+h1{
+    text-align: center;
+}

@@ -1,36 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const servicesObject = [
-    {
-      name: "TermService",
-      os: "windows",
-      dependencies: ["UmRdpService"],
-      status: "IDLE",
-      startCommand: "rdp/start",
-      stopCommand: "rdp/stop",
-      statusCommand: "rdp/status",
-      isActive: false,
-      isLoading: false
-    },
-    {
-        name: "Teltonik",
-        os: "router",
-        dependencies: [],
-        status: "IDLE",
-        startCommand: "teltonik/start",
-        stopCommand: "teltonik/stop",
-        statusCommand: "teltonik/status",
-        isActive: false,
-        isLoading: false
-      }
-  ]
-
-
 export const controlService = createSlice({
     name: 'manageService',
     initialState: {
-        services: servicesObject,
-        consoleMessages: []
+        services: [],
+        consoleMessages: [],
+        errorConnection: false
     },
     reducers: {
         setService: (state, action) => {
@@ -71,6 +46,7 @@ export const controlService = createSlice({
                     ...state.services,
                     {
                         name: action.payload.name,
+                        alias: action.payload.alias,
                         os: (action.payload.os === 'rdp' ? "windows" : "router"),
                         dependencies: action.payload.dependencies,
                         status: "IDLE",
@@ -134,11 +110,17 @@ export const controlService = createSlice({
                     ...servicesNew
                 ]
             }
+        },
+        setError: (state, action) => {
+            return {
+                ...state,
+                errorConnection: action.payload.error
+            }
         }
     }
 })
 
 // Action creators are generated for each case reducer function
-export const { setService, checkService, addService, setLoading, popConsole, loadServices } = controlService.actions
+export const { setService,setError, checkService, addService, setLoading, popConsole, loadServices } = controlService.actions
 
 export default controlService.reducer
