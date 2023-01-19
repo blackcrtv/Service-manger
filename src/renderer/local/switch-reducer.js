@@ -56,6 +56,14 @@ export const controlService = createSlice({
                 ]
             }
         },
+        loadServices: (state, action) =>{
+            return {
+                ...state,
+                services:[
+                    ...action.payload.services
+                ]
+            }
+        },
         addService: (state, action) => {
             return {
                 ...state,
@@ -70,6 +78,7 @@ export const controlService = createSlice({
                         stopCommand: (action.payload.os === 'rdp' ? "rdp/stop" : "teltonik/stop"),
                         statusCommand: (action.payload.os === 'rdp' ? "rdp/status" : "teltonik/status"),
                         isActive: false,
+                        isLoading: false
                     }
                 ]
             }
@@ -130,6 +139,6 @@ export const controlService = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setService, checkService, addService, setLoading, popConsole } = controlService.actions
+export const { setService, checkService, addService, setLoading, popConsole, loadServices } = controlService.actions
 
 export default controlService.reducer

@@ -20,6 +20,28 @@
     inherits: false;
   }
 
+  .service-component::-webkit-scrollbar {
+    width: 8px;               /* width of the entire scrollbar */
+  }
+  
+  .service-component::-webkit-scrollbar-track {
+    background: rgba(133, 131, 131, 0.089);        /* color of the tracking area */
+  }
+  
+  .service-component::-webkit-scrollbar-thumb {
+    background-color: rgb(39, 39, 145);    /* color of the scroll thumb */
+    border-radius: 20px;       /* roundness of the scroll thumb */
+    border: 1px solid rgba(83, 81, 77, 0.575);  /* creates padding around scroll thumb */
+  }
+
+
+.service-component{
+  display: grid;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-height: 60vh;
+}
+
 .wrapper-elements {
     display: flex;
     align-items: center;
