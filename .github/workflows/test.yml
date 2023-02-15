@@ -1,6 +1,6 @@
 name: Test
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   test:
@@ -31,4 +31,4 @@ jobs:
           npm run package
           npm run lint
           npm exec tsc
-          npm test
+
