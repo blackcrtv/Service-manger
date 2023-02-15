@@ -2,18 +2,21 @@ import { useState, useEffect, useCallback } from 'react';
 import Switch from '@mui/material/Switch';
 import { useDispatch } from 'react-redux';
 
-import { setService, checkService, setLoading, setError } from '../local/switch-reducer';
+import { setService, checkService, setLoading, setError, setDisabled } from '../local/switch-reducer';
 
 export default function ControlledSwitches(props) {
     const dispatch = useDispatch();
-    const [disabledElement, setDisabled] = useState(true);
+    // const [disabledElement, setDisabled] = useState(true);
     const [flag, setFlag] = useState(false);
 
     const handleChange = async (event) => {
         try {
             let action = event.target.checked;
 
-            setDisabled(true);
+            dispatch(setDisabled({
+                id: props.id,
+                isDisabled: true
+            }));   
             setFlag(true);
             dispatch(setLoading({
                 id: props.id,
@@ -38,7 +41,10 @@ export default function ControlledSwitches(props) {
                     status: response,
                     consoleMessage: 'Service "' + props.status.name + '" is ' + response + '...'
                 }));
-                setDisabled(false);
+                dispatch(setDisabled({
+                    id: props.id,
+                    isDisabled: false
+                }))   
             } else {
                 dispatch(setService({
                     isActive: props.status.isActive,
@@ -55,7 +61,10 @@ export default function ControlledSwitches(props) {
         } catch (error) {
             console.log(error);
             setFlag(false);
-            setDisabled(false);
+            dispatch(setDisabled({
+                id: props.id,
+                isDisabled: false
+            }))   
             dispatch(setLoading({
                 id: props.id,
                 isLoading: false
@@ -96,8 +105,20 @@ export default function ControlledSwitches(props) {
     }
 
     const setServices = (response) => {
-        if (response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR' || response === 'NO-CONNECTION' || response === 'Timeout') setDisabled(true);
-        else setDisabled(false);
+        if (response === 'STOP_PENDING' || response === 'START_PENDING' || response === 'ERROR' || response === 'NO-CONNECTION' || response === 'Timeout'){
+            // setDisabled(true);
+            dispatch(setDisabled({
+                id: props.id,
+                isDisabled: true
+            }))    
+        }
+        else{
+            // setDisabled(false);
+            dispatch(setDisabled({
+                id: props.id,
+                isDisabled: false
+            }))    
+        } 
         if (response !== 'ERROR')
             dispatch(checkService({
                 id: props.id,
@@ -133,7 +154,7 @@ export default function ControlledSwitches(props) {
             checked={props.status.isActive}
             onChange={handleChange}
             inputProps={{ 'aria-label': 'controlled' }}
-            disabled={props.status.isLoading || disabledElement}
+            disabled={props.status.isLoading || props.status.isDisabled}
             color='success'
         />
     );

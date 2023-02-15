@@ -3,6 +3,7 @@ import { BarLoader } from 'react-spinners';
 import classes from '../../css/services.module.css';
 import { useSelector } from 'react-redux';
 import LaptopType from './laptop-type';
+import RestartRouter from './restart-router';
 
 const ServiceList = () => {
 
@@ -28,6 +29,7 @@ const ServiceList = () => {
                       <ControlledSwitches status={serv} id={i}></ControlledSwitches>
                       {serv.status}
                       {serv.isLoading ? <BarLoader height = {5} width={200} color = {serv.isActive ? "#d63636" : "#15762a"}></BarLoader> : <></>}
+                      {serv.os === 'router' && <RestartRouter id={i} serv={serv}></RestartRouter>}
                   </div>
               )
           }

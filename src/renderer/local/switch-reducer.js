@@ -54,7 +54,8 @@ export const controlService = createSlice({
                         stopCommand: (action.payload.os === 'rdp' ? "rdp/stop" : "teltonik/stop"),
                         statusCommand: (action.payload.os === 'rdp' ? "rdp/status" : "teltonik/status"),
                         isActive: false,
-                        isLoading: false
+                        isLoading: false,
+                        isDisabled: true
                     }
                 ]
             }
@@ -77,7 +78,8 @@ export const controlService = createSlice({
                     serv = {
                         ...serv,
                         status: action.payload.status,
-                        isActive: action.payload.isActive
+                        isActive: action.payload.isActive,
+                        isDisabled: false
                     }
                 }
                 return serv;
@@ -111,6 +113,24 @@ export const controlService = createSlice({
                 ]
             }
         },
+        setDisabled: (state, action) => {
+
+            let servicesNew = state.services.map((serv, i)=>{
+                if(i === action.payload.id){
+                    serv = {
+                        ...serv,
+                        isDisabled: action.payload.isDisabled
+                    }
+                }
+                return serv;
+            });
+            return {
+                ...state,
+                services:[
+                    ...servicesNew
+                ]
+            }
+        },
         setError: (state, action) => {
             return {
                 ...state,
@@ -121,6 +141,6 @@ export const controlService = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { setService,setError, checkService, addService, setLoading, popConsole, loadServices } = controlService.actions
+export const { setService,setError, checkService, addService, setLoading, popConsole, loadServices, setDisabled } = controlService.actions
 
 export default controlService.reducer
